@@ -8,33 +8,23 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
 
 
 public class Client  {
 	
+	private String hostAddress;
+	private int port;
 	
-	public static void main(String[] Args)
+	public Client(String add,int port)
 	{
-	//	String a[] = {"hey"};
-		//String b[] = {"hey, hey"};
-		
-		try {
-			String out = httpGet("");
-			//String out = httpPost("",a,b);
-			System.out.println(out);
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		hostAddress = add;
+		this.port = port;
 	}
 	
-	public static String httpGet(String urlStr) throws IOException {
-		  URL url = new URL("http","192.168.2.134",9000,"/MultiPiano/faixa_69");
+	
+	
+	public String httpGet(String sound) throws IOException {
+		  URL url = new URL("http",hostAddress,port,sound);
 		  HttpURLConnection conn =
 		      (HttpURLConnection) url.openConnection();
 
@@ -55,10 +45,11 @@ public class Client  {
 		  conn.disconnect();
 		  return sb.toString();
 		}
-	public static String httpPost(String urlStr, String[] paramName,
+	
+	public  String httpPost(String urlStr, String[] paramName,
 			String[] paramVal) throws Exception {
 
-		  URL url = new URL("http","192.168.2.134",9000,"/MultiPiano/1234");
+		  URL url = new URL("http","188.80.49.242",9000,"/MultiPiano/1234");
 			  HttpURLConnection conn =
 			      (HttpURLConnection) url.openConnection();
 			  conn.setRequestMethod("POST");

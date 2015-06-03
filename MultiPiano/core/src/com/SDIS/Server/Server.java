@@ -1,31 +1,64 @@
-package Server;
+package com.SDIS.Server;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.net.URL;
 import java.util.ArrayList;
 
 import com.sun.net.httpserver.HttpServer;
 
 public class Server {
 
-	InetSocketAddress port;
+	private InetSocketAddress port;
 	
-	Handler myHandler;
+	private Handler myHandler;
 	
-	ArrayList<URL> contributors;
+	private ArrayList<InetSocketAddress> contributors;
+	
+	private HttpServer server;
 	
 	public Server(InetSocketAddress port) throws IOException{
 		
+		contributors = new ArrayList<InetSocketAddress>(); 
+		
 		System.out.println("started server");
-		myHandler = new Handler();
+		myHandler = new Handler(this);
 
-		HttpServer server = HttpServer.create(new InetSocketAddress(9000), 0);
+		server = HttpServer.create(new InetSocketAddress(9000), 0);
 		
 		server.createContext("/MultiPiano", myHandler);
 		server.setExecutor(null); // creates a default executor
-		server.start();
 		
 	}
+	
+	public void start()
+	{
+		server.start();		
+	}
 
+	public InetSocketAddress getPort() {
+		return port;
+	}
+
+	public void setPort(InetSocketAddress port) {
+		this.port = port;
+	}
+
+	public Handler getMyHandler() {
+		return myHandler;
+	}
+
+	public void setMyHandler(Handler myHandler) {
+		this.myHandler = myHandler;
+	}
+
+	public ArrayList<InetSocketAddress> getContributors() {
+		return contributors;
+	}
+
+	public void setContributors(ArrayList<InetSocketAddress> contributors) {
+		this.contributors = contributors;
+	}
+
+	
+	
 }

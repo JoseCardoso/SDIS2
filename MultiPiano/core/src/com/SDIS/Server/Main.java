@@ -1,4 +1,4 @@
-package Server;
+package com.SDIS.Server;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -8,7 +8,7 @@ public class Main {
 		
 		System.out.println("entered main");
 		Server server = new Server(new InetSocketAddress(9000));
-		
+		server.start();
 		
 	}
 
