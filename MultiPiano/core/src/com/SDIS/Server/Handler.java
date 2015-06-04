@@ -130,8 +130,8 @@ public class Handler implements HttpHandler{
 			return "Not Joined, please join session before playing.\n";
 
 		String[] faixa = path.split("/");
-		String[] numero = faixa[2].split(".");//faixa_NUM
-		int num = Integer.parseInt(numero[0].split("ff")[1]);
+	
+		int num = Integer.parseInt(faixa[2].split("ff")[1]);
 		
 		
 		if(num < 1 || num > 64)
