@@ -17,9 +17,12 @@ import com.SDIS.client.*;
 public class GameScreen implements Screen {
 
 	private Client cli;
+<<<<<<< HEAD
 	private Texture menuText, playText, exitText;
 	public Sprite menuSprite, playSprite, exitSprite;
+=======
 	private Listener list;
+>>>>>>> origin/master
 	public Sound sel;
 	private OrthographicCamera cam;
 	private SpriteBatch batch;

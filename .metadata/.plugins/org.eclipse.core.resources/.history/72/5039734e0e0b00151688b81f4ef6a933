@@ -80,9 +80,8 @@ public class GameInputProcessor implements InputProcessor {
 
 			}*/
 			}
-			
+			return false;
 		}
-		return false;
 	}
 
 		@Override
