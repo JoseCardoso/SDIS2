@@ -74,9 +74,11 @@ public class GameInputProcessor implements InputProcessor {
 						}
 					}
 				}
-			} catch (IOException e) {
+				} catch (IOException e) {
 
+				}
 			}
+
 		}
 		return false;
 	}
