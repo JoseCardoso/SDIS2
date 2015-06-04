@@ -12,8 +12,8 @@ public class GameInputProcessor implements InputProcessor {
 	
 	@Override
 	public boolean keyDown(int keycode) {
-		if (keycode >= 0 && keycode <= 63)
-			screen.tracks.get(keycode).play();
+		//if (keycode >= 0 && keycode <= 64)
+			//screen.tracks.get(keycode).play();
 		return false;
 	}
 
@@ -31,7 +31,23 @@ public class GameInputProcessor implements InputProcessor {
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		// TODO Auto-generated method stub
+		System.out.println("TESTE: " + screen.keys.size());
+		for (int i = 0; i < screen.keys.size(); i++) {
+			if (screen.keys.get(i).type==1) {
+				if(screen.keys.get(i).touched(screenX, screenY)){
+					screen.keys.get(i).track.play();
+					return true;
+				}
+			}
+		}
+		for (int i = 0; i < screen.keys.size(); i++) {
+			if (screen.keys.get(i).type==0) {
+				if(screen.keys.get(i).touched(screenX, screenY)){
+					screen.keys.get(i).track.play();
+					return true;
+				}
+			}
+		}
 		return false;
 	}
 

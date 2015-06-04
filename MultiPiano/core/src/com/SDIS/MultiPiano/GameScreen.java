@@ -1,29 +1,56 @@
 package com.SDIS.MultiPiano;
 
-import java.util.ArrayList;
-
+import java.util.Vector;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 
 public class GameScreen implements Screen {
-	
+
 	public Sound sel;
-	public ArrayList<Sound> tracks;
+	private OrthographicCamera cam;
+	private SpriteBatch batch;
+	public Vector<Key> keys;
+	public float w, h;
+
+	public int userNo = 2; // COMECA EM 0 PARA FACILITAR OS CICLOS
+
+
 	public GameScreen(){
-		tracks=new ArrayList<Sound>();
-		//sel=Gdx.audio.newSound(Gdx.files.internal("sel.wav"));
-		for (int i = 1; i < 64; i++) {
+		w = Gdx.graphics.getWidth();
+		h = Gdx.graphics.getHeight();
+		batch = new SpriteBatch();
+		cam = new OrthographicCamera(1000, 700);
+		this.keys= new Vector<Key>();
+
+		//CREATE OCTATE
+		//TYPE 1 - BLACK
+		//TYPE 0 - WHITE
+		int b=0, w=0;
+		for(int i = 0; i < 12; i++){
 			String trk_name;
-			if(i<10)
-				trk_name="ff00" + i;
+			int realNo = (12*userNo)+i;
+			if(realNo<9)
+				trk_name="ff00" + (realNo+1);
 			else
-				trk_name="ff0" + i;
-			tracks.add(Gdx.audio.newSound(Gdx.files.internal("piano_keys/" +trk_name +".wav")));
+				trk_name="ff0" + (realNo+1);
+
+			if(i == 1 || i == 3 || i == 6 || i == 8 || i == 10){  //BLACK KEYS
+				keys.add(new Key(1, b, Gdx.audio.newSound(Gdx.files.internal("piano_keys/" +trk_name +".wav")), this));
+				b++;
+			}
+			else{ // WHITE KEYS
+				keys.add(new Key(0, w, Gdx.audio.newSound(Gdx.files.internal("piano_keys/" +trk_name +".wav")), this));
+				w++;
+			}
 		}
+		cam.update();
 	}
-	
+
 	@Override
 	public void show() {
 		Gdx.input.setInputProcessor(new GameInputProcessor(this));
@@ -32,38 +59,56 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glClearColor(0, 0.4f, 0.2f, 1);
+		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		batch.begin();
+		
+		
+		//DRAW KEYS
+		//2/3 width
+		// White Width - W/8
+		// Black Width - ((W/8)*2)/3
+		// Black Start Position - (((W/8)*2)/3)*i
+		//batch.draw(whiteKey,(w*i)/8,0,w/8,h);
+		
+		for(int i=0; i<keys.size(); i++){
+			if(keys.get(i).type==0)
+				batch.draw(keys.get(i).key, keys.get(i).x, keys.get(i).y, keys.get(i).width, keys.get(i).height);
+		}
+		for(int i=0; i<keys.size(); i++){
+			if(keys.get(i).type==1)
+				batch.draw(keys.get(i).key, keys.get(i).x, keys.get(i).y, keys.get(i).width, keys.get(i).height);
+		}
+		
+		batch.end();
 	}
 
 	@Override
 	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void pause() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void resume() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
-		
+		batch.dispose();
 	}
 
 }
