@@ -31,19 +31,20 @@ public class GameInputProcessor implements InputProcessor {
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		System.out.println("TESTE: " + screen.keys.size());
-		for (int i = 0; i < screen.keys.size(); i++) {
+		for (int i = 0; i < screen.keys.size(); i++) { //CHECK BLACK
 			if (screen.keys.get(i).type==1) {
 				if(screen.keys.get(i).touched(screenX, screenY)){
 					screen.keys.get(i).track.play();
+					screen.keys.get(i).setShadowSprite();
 					return true;
 				}
 			}
 		}
-		for (int i = 0; i < screen.keys.size(); i++) {
+		for (int i = 0; i < screen.keys.size(); i++) { //CHECK WHITE
 			if (screen.keys.get(i).type==0) {
 				if(screen.keys.get(i).touched(screenX, screenY)){
 					screen.keys.get(i).track.play();
+					screen.keys.get(i).setShadowSprite();
 					return true;
 				}
 			}
@@ -53,7 +54,22 @@ public class GameInputProcessor implements InputProcessor {
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		// TODO Auto-generated method stub
+		for (int i = 0; i < screen.keys.size(); i++) {
+			if (screen.keys.get(i).type==1) {
+				if(screen.keys.get(i).touched(screenX, screenY)){
+					screen.keys.get(i).setSprite();
+					return true;
+				}
+			}
+		}
+		for (int i = 0; i < screen.keys.size(); i++) {
+			if (screen.keys.get(i).type==0) {
+				if(screen.keys.get(i).touched(screenX, screenY)){
+					screen.keys.get(i).setSprite();
+					return true;
+				}
+			}
+		}
 		return false;
 	}
 
