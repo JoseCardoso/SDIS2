@@ -1,7 +1,9 @@
 package com.SDIS.Server;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.URL;
 import java.util.ArrayList;
 
 import com.sun.net.httpserver.HttpServer;
@@ -12,18 +14,18 @@ public class Server {
 	
 	private Handler myHandler;
 	
-	private ArrayList<InetSocketAddress> contributors;
+	private ArrayList<InetAddress> contributors;
 	
 	private HttpServer server;
 	
 	public Server(InetSocketAddress port) throws IOException{
 		
-		contributors = new ArrayList<InetSocketAddress>(); 
+		contributors = new ArrayList<InetAddress>(); 
 		
 		System.out.println("started server");
 		myHandler = new Handler(this);
 
-		server = HttpServer.create(new InetSocketAddress(9000), 0);
+		server = HttpServer.create(port, 0);
 		
 		server.createContext("/MultiPiano", myHandler);
 		server.setExecutor(null); // creates a default executor
@@ -51,11 +53,11 @@ public class Server {
 		this.myHandler = myHandler;
 	}
 
-	public ArrayList<InetSocketAddress> getContributors() {
+	public ArrayList<InetAddress> getContributors() {
 		return contributors;
 	}
 
-	public void setContributors(ArrayList<InetSocketAddress> contributors) {
+	public void setContributors(ArrayList<InetAddress> contributors) {
 		this.contributors = contributors;
 	}
 

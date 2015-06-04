@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Scanner;
 
 import com.sun.net.httpserver.HttpExchange;
@@ -47,7 +49,7 @@ public class Handler implements HttpHandler{
 				response = "Erro no disconnect";
 		}
 		else
-			response = "Recebi" + getFaixa(path);
+			response = "Recebi " + getFaixa(path, t);
 			
 
 		// read(is); // .. read the request body
@@ -59,14 +61,21 @@ public class Handler implements HttpHandler{
 
 	}
 
-	public String getFaixa(String path){
+	public String getFaixa(String path, HttpExchange t){
+		
+		InetSocketAddress temp = t.getRemoteAddress();
+
+		if(!svr.getContributors().contains(temp.getAddress()))	
+			return "Not Joined, please join session before playing.\n";
 
 		String[] faixa = path.split("/");
 		String[] numero = faixa[2].split("_");//faixa_NUM
-		int num = Integer.parseInt(numero[2]);
+		int num = Integer.parseInt(numero[1]);
 
+		
 		if(num < 22 || num > 25)
 			System.out.println("invalid track");
+		
 
 		return faixa[2];
 
@@ -75,26 +84,26 @@ public class Handler implements HttpHandler{
 	}
 
 
-	public boolean joinClient(HttpExchange t)
+	public boolean joinClient(HttpExchange t) throws MalformedURLException
 	{
 
-		InetSocketAddress temp = t.getLocalAddress();
+		InetSocketAddress temp = t.getRemoteAddress();
 
-		if(svr.getContributors().contains(temp))	
+		if(svr.getContributors().contains(temp.getAddress()))	
 			return false;
 		else
 		{
-			svr.getContributors().add(temp);
+			svr.getContributors().add(temp.getAddress());
 			return true;
 		}
 	}
 
 	public boolean disconnectClient(HttpExchange t)
 	{
-		InetSocketAddress temp = t.getLocalAddress();
+		InetSocketAddress temp = t.getRemoteAddress();
 
-
-		return svr.getContributors().remove(temp);
+	
+		return svr.getContributors().remove(temp.getAddress());
 
 	}
 
