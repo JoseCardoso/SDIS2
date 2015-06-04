@@ -37,35 +37,41 @@ public class GameInputProcessor implements InputProcessor {
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 
-		try{
-			for (int i = 0; i < screen.keys.size(); i++) { //CHECK BLACK
-				if (screen.keys.get(i).type==1) {
-					if(screen.keys.get(i).touched(screenX, screenY)){
-						screen.keys.get(i).track.play();
+		for (int i = 0; i < screen.keys.size(); i++) { //CHECK BLACK
+			if (screen.keys.get(i).type==1) {
+				if(screen.keys.get(i).touched(screenX, screenY)){
+					screen.keys.get(i).track.play();
 
-						String mes = "/MultiPiano/";
-						mes += screen.keys.get(i).trackName;
+					String mes = "/MultiPiano/";
+					mes += screen.keys.get(i).trackName;
+					try {
 						cli.httpGet(mes);
-						screen.keys.get(i).setShadowSprite();
-						return true;
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
+					screen.keys.get(i).setShadowSprite();
+					return true;
 				}
 			}
-			for (int i = 0; i < screen.keys.size(); i++) { //CHECK WHITE
-				if (screen.keys.get(i).type==0) {
-					if(screen.keys.get(i).touched(screenX, screenY)){
-						screen.keys.get(i).track.play();
+		}
+		for (int i = 0; i < screen.keys.size(); i++) { //CHECK WHITE
+			if (screen.keys.get(i).type==0) {
+				if(screen.keys.get(i).touched(screenX, screenY)){
+					screen.keys.get(i).track.play();
 
-						String mes = "/MultiPiano/";
-						mes += screen.keys.get(i).trackName;
+					String mes = "/MultiPiano/";
+					mes += screen.keys.get(i).trackName;
+					try {
 						cli.httpGet(mes);
-						screen.keys.get(i).setShadowSprite();
-						return true;
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
+					screen.keys.get(i).setShadowSprite();
+					return true;
 				}
 			}
-		} catch (IOException e) {
-			
 		}
 		return false;
 	}

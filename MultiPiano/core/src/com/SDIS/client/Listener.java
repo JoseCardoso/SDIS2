@@ -8,10 +8,11 @@ public class Listener extends Thread {
 	
 	
 	
+	
+	
 	public void start()
 	{
 		super.start();
-		list.start();
 	}
 
 }

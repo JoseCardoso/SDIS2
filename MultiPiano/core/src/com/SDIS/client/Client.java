@@ -22,7 +22,6 @@ public class Client  {
 	}
 	
 	
-	
 	public String httpGet(String sound) throws IOException {
 		  URL url = new URL("http",hostAddress,port,sound);
 		  HttpURLConnection conn =
@@ -45,6 +44,7 @@ public class Client  {
 		  conn.disconnect();
 		  return sb.toString();
 		}
+	
 	
 	public  String httpPost(String urlStr, String[] paramName,
 			String[] paramVal) throws Exception {
