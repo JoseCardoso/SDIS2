@@ -1,6 +1,9 @@
 package com.SDIS.MultiPiano;
 
+import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.util.Vector;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
@@ -12,6 +15,7 @@ import com.SDIS.client.*;
 public class GameScreen implements Screen {
 
 	private Client cli;
+	private Listener list;
 	public Sound sel;
 	private OrthographicCamera cam;
 	private SpriteBatch batch;
@@ -22,6 +26,13 @@ public class GameScreen implements Screen {
 
 
 	public GameScreen(Client cli){
+		
+		try {
+			list = new Listener(new InetSocketAddress(9001), this);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		this.cli = cli;
 		w = Gdx.graphics.getWidth();
 		h = Gdx.graphics.getHeight();
