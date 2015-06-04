@@ -13,10 +13,12 @@ public class Key {
 	public Sprite key;
 	public GameScreen screen;
 	public float x, y, width, height;
+	public String trackName;
 	
 	public Key(){}
 
-	public Key(int type, int pos, Sound track, GameScreen screen){
+	public Key(int type, int pos, Sound track, GameScreen screen, String trackName){
+		this.trackName = trackName;
 		this.track=track;
 		this.type=type;
 		this.screen = screen;

@@ -69,11 +69,11 @@ public class Handler implements HttpHandler{
 			return "Not Joined, please join session before playing.\n";
 
 		String[] faixa = path.split("/");
-		String[] numero = faixa[2].split("_");//faixa_NUM
-		int num = Integer.parseInt(numero[1]);
-
+		String[] numero = faixa[2].split(".");//faixa_NUM
+		int num = Integer.parseInt(numero[0].split("ff")[0]);
 		
-		if(num < 22 || num > 25)
+		
+		if(num < 1 || num > 64)
 			System.out.println("invalid track");
 		
 

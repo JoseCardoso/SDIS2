@@ -7,20 +7,22 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
+import com.SDIS.client.*;
 
 public class GameScreen implements Screen {
 
+	private Client cli;
 	public Sound sel;
 	private OrthographicCamera cam;
 	private SpriteBatch batch;
 	public Vector<Key> keys;
 	public float w, h;
 
-	public int userNo = 2; // COMECA EM 0 PARA FACILITAR OS CICLOS
+	public int userNo = 2; // % 5
 
 
-	public GameScreen(){
+	public GameScreen(Client cli){
+		this.cli = cli;
 		w = Gdx.graphics.getWidth();
 		h = Gdx.graphics.getHeight();
 		batch = new SpriteBatch();
@@ -40,11 +42,11 @@ public class GameScreen implements Screen {
 				trk_name="ff0" + (realNo+1);
 
 			if(i == 1 || i == 3 || i == 6 || i == 8 || i == 10){  //BLACK KEYS
-				keys.add(new Key(1, b, Gdx.audio.newSound(Gdx.files.internal("piano_keys/" +trk_name +".wav")), this));
+				keys.add(new Key(1, b, Gdx.audio.newSound(Gdx.files.internal("piano_keys/" +trk_name +".wav")), this,trk_name));
 				b++;
 			}
 			else{ // WHITE KEYS
-				keys.add(new Key(0, w, Gdx.audio.newSound(Gdx.files.internal("piano_keys/" +trk_name +".wav")), this));
+				keys.add(new Key(0, w, Gdx.audio.newSound(Gdx.files.internal("piano_keys/" +trk_name +".wav")), this,trk_name));
 				w++;
 			}
 		}
@@ -53,7 +55,7 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void show() {
-		Gdx.input.setInputProcessor(new GameInputProcessor(this));
+		Gdx.input.setInputProcessor(new GameInputProcessor(this,cli));
 		//Gdx.input.setCursorCatched(true);
 	}
 

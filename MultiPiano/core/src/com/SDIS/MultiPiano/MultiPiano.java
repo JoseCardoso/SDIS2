@@ -1,18 +1,39 @@
 package com.SDIS.MultiPiano;
 
+import java.io.IOException;
+
+import com.SDIS.client.Client;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 
 public class MultiPiano extends Game implements ApplicationListener {
+	private Client cli;
 	@Override
 	public void create() {
-		setScreen(new GameScreen());
+		cli = new Client("188.80.49.242", 9001);
+		try {
+			String joined = cli.httpGet("/MultiPiano/join");
+			setScreen(new GameScreen(cli));
+			
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			///CRIAR ECRÃ DE ERRO
+			e.printStackTrace();
+		}
+		
 	}
 
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
+		try {
+			String dc = cli.httpGet("/MultiPiano/disconnect");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		super.dispose();
 	}
 
