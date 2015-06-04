@@ -73,6 +73,21 @@ public class GameInputProcessor implements InputProcessor {
 							return true;
 						}
 					}
+					
+				}
+				for (int i = 0; i < screen.keys.size(); i++) { //CHECK BLACK
+					if (screen.keys.get(i).type==0) {
+						if(screen.keys.get(i).touched(screenX, screenY)){
+							screen.keys.get(i).track.play();
+
+							String mes = "/MultiPiano/";
+							mes += screen.keys.get(i).trackName;
+							cli.httpGet(mes);
+							screen.keys.get(i).setShadowSprite();
+							return true;
+						}
+					}
+					
 				}
 			} catch (IOException e) {
 

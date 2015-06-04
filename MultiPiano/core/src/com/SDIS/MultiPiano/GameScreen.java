@@ -25,7 +25,7 @@ public class GameScreen implements Screen {
 	private SpriteBatch batch;
 	public Vector<Key> keys;
 	public float w, h;
-	public boolean MENU = true;
+	public boolean MENU = false;
 
 	public int userNo = 2; // % 5
 
