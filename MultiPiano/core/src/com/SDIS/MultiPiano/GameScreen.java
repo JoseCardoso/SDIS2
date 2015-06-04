@@ -7,16 +7,21 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.SDIS.client.*;
 
 public class GameScreen implements Screen {
 
 	private Client cli;
+	private Texture menuText, playText, exitText;
+	public Sprite menuSprite, playSprite, exitSprite;
 	public Sound sel;
 	private OrthographicCamera cam;
 	private SpriteBatch batch;
 	public Vector<Key> keys;
 	public float w, h;
+	public boolean MENU = true;
 
 	public int userNo = 2; // % 5
 
@@ -28,6 +33,12 @@ public class GameScreen implements Screen {
 		batch = new SpriteBatch();
 		cam = new OrthographicCamera(1000, 700);
 		this.keys= new Vector<Key>();
+		this.menuText = new Texture(Gdx.files.internal("images/sprite_fundo.jpg"));
+		this.playText = new Texture(Gdx.files.internal("images/sprite_play.jpg"));
+		this.exitText = new Texture(Gdx.files.internal("images/sprite_exit.jpg"));
+		this.menuSprite = new Sprite(menuText);
+		this.playSprite = new Sprite(playText);;
+		this.exitSprite = new Sprite(exitText);;
 
 		//CREATE OCTATE
 		//TYPE 1 - BLACK
@@ -55,34 +66,35 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void show() {
-		Gdx.input.setInputProcessor(new GameInputProcessor(this,cli));
-		//Gdx.input.setCursorCatched(true);
+		if(MENU){}
+		else
+			Gdx.input.setInputProcessor(new GameInputProcessor(this,cli));
 	}
 
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glClearColor(0, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		batch.begin();
-		
-		
-		//DRAW KEYS
-		//2/3 width
-		// White Width - W/8
-		// Black Width - ((W/8)*2)/3
-		// Black Start Position - (((W/8)*2)/3)*i
-		//batch.draw(whiteKey,(w*i)/8,0,w/8,h);
-		
-		for(int i=0; i<keys.size(); i++){
-			if(keys.get(i).type==0)
-				batch.draw(keys.get(i).key, keys.get(i).x, keys.get(i).y, keys.get(i).width, keys.get(i).height);
+		if(MENU){
+			batch.begin();
+			batch.draw(menuSprite, 0, 0, w, h);
+			batch.draw(playSprite, (w/2)-150, h/4, 130, 50);
+			batch.draw(exitSprite, (w/2)+50, h/4, 130, 50);
+			batch.end();
 		}
-		for(int i=0; i<keys.size(); i++){
-			if(keys.get(i).type==1)
-				batch.draw(keys.get(i).key, keys.get(i).x, keys.get(i).y, keys.get(i).width, keys.get(i).height);
+		else{
+			Gdx.gl.glClearColor(0, 0, 0, 1);
+			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+			batch.begin();
+
+			for(int i=0; i<keys.size(); i++){
+				if(keys.get(i).type==0)
+					batch.draw(keys.get(i).key, keys.get(i).x, keys.get(i).y, keys.get(i).width, keys.get(i).height);
+			}
+			for(int i=0; i<keys.size(); i++){
+				if(keys.get(i).type==1)
+					batch.draw(keys.get(i).key, keys.get(i).x, keys.get(i).y, keys.get(i).width, keys.get(i).height);
+			}
+			batch.end();
 		}
-		
-		batch.end();
 	}
 
 	@Override

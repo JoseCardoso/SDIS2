@@ -11,10 +11,11 @@ public class MultiPiano extends Game implements ApplicationListener {
 	private Client cli;
 	@Override
 	public void create() {
-		cli = new Client("188.80.49.242", 9001);
+		//cli = new Client("188.80.49.242", 9001);
+		/*
 		try {
 			String joined = cli.httpGet("/MultiPiano/join");
-			setScreen(new GameScreen(cli));
+			
 			
 			
 		} catch (IOException e) {
@@ -22,18 +23,21 @@ public class MultiPiano extends Game implements ApplicationListener {
 			///CRIAR ECRÃ DE ERRO
 			e.printStackTrace();
 		}
-		
+		*/
+		setScreen(new GameScreen(cli));
 	}
 
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
+		/*
 		try {
 			String dc = cli.httpGet("/MultiPiano/disconnect");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		*/
 		super.dispose();
 	}
 

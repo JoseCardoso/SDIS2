@@ -9,15 +9,16 @@ import com.SDIS.client.*;
 public class GameInputProcessor implements InputProcessor {
 
 	private GameScreen screen;
-	private Client cli;
+	//private Client cli;
 
 	public GameInputProcessor(GameScreen gameScreen,Client cli) {
-		this.cli = cli;
+		//this.cli = cli;
 		this.screen = gameScreen;
 	}
 
 	@Override
 	public boolean keyDown(int keycode) {
+
 		Sound s;
 		if (keycode >= 1 && keycode <= 64){
 			if(keycode<10)
@@ -43,16 +44,30 @@ public class GameInputProcessor implements InputProcessor {
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-
-		try{
+		if(screen.MENU){
+			if(		(screen.playSprite.getX()) < screenX && 
+					(screen.playSprite.getWidth() + screen.playSprite.getX()) > screenX &&
+					(screen.playSprite.getY() < (screen.h - screenY)) &&
+					(screen.playSprite.getHeight() + screen.playSprite.getY()) > (screen.h - screenY) ){
+				screen.MENU = false;
+			}
+			if(		(screen.exitSprite.getX()) < screenX && 
+					(screen.exitSprite.getWidth() + screen.playSprite.getX()) > screenX &&
+					(screen.exitSprite.getY() < (screen.h - screenY)) &&
+					(screen.exitSprite.getHeight() + screen.playSprite.getY()) > (screen.h - screenY) ){
+				screen.dispose();
+			}
+		}
+		else{
+			//try{
 			for (int i = 0; i < screen.keys.size(); i++) { //CHECK BLACK
 				if (screen.keys.get(i).type==1) {
 					if(screen.keys.get(i).touched(screenX, screenY)){
 						screen.keys.get(i).track.play();
-
+						/*
 						String mes = "/MultiPiano/";
 						mes += screen.keys.get(i).trackName;
-						cli.httpGet(mes);
+						cli.httpGet(mes);*/
 						screen.keys.get(i).setShadowSprite();
 						return true;
 					}
@@ -63,16 +78,17 @@ public class GameInputProcessor implements InputProcessor {
 					if(screen.keys.get(i).touched(screenX, screenY)){
 						screen.keys.get(i).track.play();
 
-						String mes = "/MultiPiano/";
+						/*String mes = "/MultiPiano/";
 						mes += screen.keys.get(i).trackName;
-						cli.httpGet(mes);
+						cli.httpGet(mes);*/
 						screen.keys.get(i).setShadowSprite();
 						return true;
 					}
 				}
 			}
-		} catch (IOException e) {
-			
+			/*} catch (IOException e) {
+
+			}*/
 		}
 		return false;
 	}
