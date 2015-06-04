@@ -1,8 +1,9 @@
 package com.SDIS.MultiPiano;
 
 import java.io.IOException;
-
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.audio.Sound;
 import com.SDIS.client.*;
 
 public class GameInputProcessor implements InputProcessor {
@@ -17,8 +18,14 @@ public class GameInputProcessor implements InputProcessor {
 
 	@Override
 	public boolean keyDown(int keycode) {
-		//if (keycode >= 0 && keycode <= 64)
-		//screen.tracks.get(keycode).play();
+		Sound s;
+		if (keycode >= 1 && keycode <= 64){
+			if(keycode<10)
+				s = Gdx.audio.newSound(Gdx.files.internal("piano_keys/ff00" +keycode +".wav"));
+			else
+				s = Gdx.audio.newSound(Gdx.files.internal("piano_keys/ff0" +keycode +".wav"));
+			s.play();
+		}
 		return false;
 	}
 
