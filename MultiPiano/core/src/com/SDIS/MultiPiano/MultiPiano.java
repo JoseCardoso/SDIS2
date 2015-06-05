@@ -12,7 +12,7 @@ public class MultiPiano extends Game implements ApplicationListener {
 	@Override
 	public void create() {
 		
-		cli = new Client("192.168.2.116", 9001);
+		cli = new Client("192.168.2.106", 9001);
 		try {
 			cli.httpGet("/MultiPiano/join");
 		} catch (IOException e) {

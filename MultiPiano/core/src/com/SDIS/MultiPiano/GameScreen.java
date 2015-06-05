@@ -2,6 +2,7 @@ package com.SDIS.MultiPiano;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
 import java.util.Vector;
 
 import com.badlogic.gdx.Gdx;
@@ -26,6 +27,7 @@ public class GameScreen implements Screen {
 	public Vector<Key> keys;
 	public float w, h;
 	public boolean MENU = false;
+	public ArrayList<Sound> tracks;
 
 	public int userNo = 2; // % 5
 
@@ -48,8 +50,9 @@ public class GameScreen implements Screen {
 		this.playText = new Texture(Gdx.files.internal("images/sprite_play.jpg"));
 		this.exitText = new Texture(Gdx.files.internal("images/sprite_exit.jpg"));
 		this.menuSprite = new Sprite(menuText);
-		this.playSprite = new Sprite(playText);;
-		this.exitSprite = new Sprite(exitText);;
+		this.playSprite = new Sprite(playText);
+		this.exitSprite = new Sprite(exitText);
+		this.tracks = new ArrayList<Sound>();
 
 		//CREATE OCTATE
 		//TYPE 1 - BLACK
@@ -72,6 +75,16 @@ public class GameScreen implements Screen {
 				w++;
 			}
 		}
+		for(int i = 1; i<64; i++){
+			String trk_name;
+			if(i<10)
+				trk_name="ff00" + i;
+			else
+				trk_name="ff0" + i;
+			tracks.add(Gdx.audio.newSound(Gdx.files.internal("piano_keys/" +trk_name +".wav")));
+		}
+		
+		list.start();
 		cam.update();
 	}
 
