@@ -21,7 +21,7 @@ public class GameScreen implements Screen {
 	private Texture menuText, playText, logoText;
 	public Sprite menuSprite, playSprite, logoSprite;
 	private OrthographicCamera cam;
-	private SpriteBatch batch;
+	private SpriteBatch menuBatch, batch;
 	public Vector<Key> keys;
 	public float w, h;
 	public boolean MENU = true;
@@ -35,6 +35,7 @@ public class GameScreen implements Screen {
 		this.cli = cli;
 		w = Gdx.graphics.getWidth();
 		h = Gdx.graphics.getHeight();
+		menuBatch = new SpriteBatch();
 		batch = new SpriteBatch();
 		cam = new OrthographicCamera(1000, 700);
 		this.keys = new Vector<Key>();
@@ -48,7 +49,7 @@ public class GameScreen implements Screen {
 		this.menuSprite = new Sprite(menuText);
 		this.playSprite = new Sprite(playText);
 		this.tracks = new ArrayList<Sound>();
-
+		//initThread();
 		cam.update();
 	}
 
@@ -107,10 +108,10 @@ public class GameScreen implements Screen {
 			playYInit = (h / 4) - 50;
 			playYFin = (h / 4) + 65;
 
-			batch.begin();
-			batch.draw(menuSprite, 0, 0, w, h);
-			batch.draw(playSprite, playXInit, playYInit, 130, 65);
-			batch.end();
+			menuBatch.begin();
+			menuBatch.draw(menuSprite, 0, 0, w, h);
+			menuBatch.draw(playSprite, playXInit, playYInit, 130, 65);
+			menuBatch.end();
 		} else {
 			batch.begin();
 
@@ -169,6 +170,14 @@ public class GameScreen implements Screen {
 
 	public void setUser(int userId) {
 		userNo = userId;
+	}
+
+	
+	public void menuDispose() {
+		// TODO Auto-generated method stub
+		menuText.dispose();
+		playText.dispose();
+		menuBatch.dispose();
 	}
 
 }

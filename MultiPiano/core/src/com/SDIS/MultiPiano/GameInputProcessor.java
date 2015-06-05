@@ -52,6 +52,7 @@ public class GameInputProcessor implements InputProcessor {
 					(screen.playYFin > (screen.h - screenY) )){
 				screen.MENU = false;
 				screen.initThread();
+				screen.menuDispose();
 			}
 		}
 		else{
@@ -114,9 +115,6 @@ public class GameInputProcessor implements InputProcessor {
 
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		for (int i = 0; i < screen.keys.size(); i++) {
-			screen.keys.get(i).setSprite();
-		}
 		return true;
 	}
 
