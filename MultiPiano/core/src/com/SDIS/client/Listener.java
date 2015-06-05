@@ -1,28 +1,22 @@
 package com.SDIS.client;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
-
-
-
-import java.net.MulticastSocket;
 import java.net.SocketException;
 
 import com.SDIS.MultiPiano.GameScreen;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpServer;
 
 public class Listener extends Thread {
 
 	private GameScreen gs;
 	private byte[] buffer = new byte[256];
+	private DatagramSocket clientSocket;
 
 	public Listener(GameScreen gameScreen)  throws IOException {
 		this.gs = gameScreen;
+		this.clientSocket = new DatagramSocket(9004);
 
 	}
 
@@ -31,17 +25,13 @@ public class Listener extends Thread {
 		do{
 			try {
 
-
-				DatagramSocket clientSocket = new DatagramSocket();
-
 				DatagramPacket receivePacket = new DatagramPacket(buffer, buffer.length);
 				clientSocket.receive(receivePacket);
 
-
-				String msg = new String(buffer, 0, buffer.length);
+				String msg = new String(receivePacket.getData(), 0, receivePacket.getLength());
 
 				int tracknum = getFaixaToPlay(msg);
-				gs.keys.get(tracknum -1).track.play();
+				gs.tracks.get(tracknum - 1).play();
 
 			} catch (SocketException e) {
 				// TODO Auto-generated catch block
