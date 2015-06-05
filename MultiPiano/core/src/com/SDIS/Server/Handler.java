@@ -21,7 +21,6 @@ import com.sun.net.httpserver.HttpHandler;
 public class Handler implements HttpHandler{
 
 	private Server svr;
-	private int counter= 0;
 
 	public Handler(Server svr){
 		this.svr = svr;
@@ -169,8 +168,10 @@ public class Handler implements HttpHandler{
 		else
 		{
 			svr.getContributors().add(temp.getAddress());
-			counter++;
-			String msgToSend = "" + counter;
+			svr.counter++;
+			String msgToSend = "/userId: " + svr.counter;
+		
+			System.out.println("msg: " + msgToSend);
 			try {
 			DatagramSocket serverSocket = new DatagramSocket();
 			DatagramPacket msgPacket = new DatagramPacket(msgToSend.getBytes(),

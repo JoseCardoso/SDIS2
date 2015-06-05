@@ -17,6 +17,8 @@ public class Server {
 	
 	private HttpServer server;
 	
+	static public int counter = 0;
+	
 	public Server(InetSocketAddress port) throws IOException{
 		
 		contributors = new ArrayList<InetAddress>(); 
