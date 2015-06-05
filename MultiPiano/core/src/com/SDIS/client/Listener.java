@@ -8,16 +8,16 @@ import java.net.SocketException;
 
 import com.SDIS.MultiPiano.GameScreen;
 
-public class Listener extends Thread {
+public class Listener implements Runnable { 
 
 	private GameScreen gs;
 	private byte[] buffer = new byte[256];
 	private DatagramSocket clientSocket;
 
-	public Listener(GameScreen gameScreen)  throws IOException {
+	public Listener(GameScreen gameScreen)  throws IOException  {
 		this.gs = gameScreen;
-		this.clientSocket = new DatagramSocket(9004);
-
+		this.clientSocket = new DatagramSocket(9003);
+		
 	}
 
 	public void run()
@@ -29,9 +29,13 @@ public class Listener extends Thread {
 				clientSocket.receive(receivePacket);
 
 				String msg = new String(receivePacket.getData(), 0, receivePacket.getLength());
-
-				int tracknum = getFaixaToPlay(msg);
-				gs.tracks.get(tracknum - 1).play();
+				//if(msg.getBytes()[0]=='f'){
+					int tracknum = getFaixaToPlay(msg);
+					gs.tracks.get(tracknum - 1).play();
+					//}
+			/*	else{
+					gs.userNo=Integer.parseInt(msg);
+				}*/
 
 			} catch (SocketException e) {
 				// TODO Auto-generated catch block

@@ -20,7 +20,6 @@ public class GameScreen implements Screen {
 	private Client cli;
 	private Texture menuText, playText, exitText;
 	public Sprite menuSprite, playSprite, exitSprite;
-	private Listener list;
 	public Sound sel;
 	private OrthographicCamera cam;
 	private SpriteBatch batch;
@@ -34,12 +33,6 @@ public class GameScreen implements Screen {
 
 	public GameScreen(Client cli){
 		
-		try {
-			list = new Listener( this);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		this.cli = cli;
 		w = Gdx.graphics.getWidth();
 		h = Gdx.graphics.getHeight();
@@ -83,8 +76,14 @@ public class GameScreen implements Screen {
 				trk_name="ff0" + i;
 			tracks.add(Gdx.audio.newSound(Gdx.files.internal("piano_keys/" +trk_name +".wav")));
 		}
-		
-		list.start();
+
+		try {
+			new Thread(new Listener(this)).start();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//list.start();
 		cam.update();
 	}
 
