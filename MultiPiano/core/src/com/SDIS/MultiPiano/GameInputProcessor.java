@@ -46,17 +46,12 @@ public class GameInputProcessor implements InputProcessor {
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 
 		if(screen.MENU){
-			if(		(screen.playSprite.getX()) < screenX && 
-					(screen.playSprite.getWidth() + screen.playSprite.getX()) > screenX &&
-					(screen.playSprite.getY() < (screen.h - screenY)) &&
-					(screen.playSprite.getHeight() + screen.playSprite.getY()) > (screen.h - screenY) ){
+			if(		(screen.playXInit < screenX) && 
+					(screen.playXFin > screenX) &&
+					(screen.playYInit < (screen.h - screenY)) &&
+					(screen.playYFin > (screen.h - screenY) )){
 				screen.MENU = false;
-			}
-			if(		(screen.exitSprite.getX()) < screenX && 
-					(screen.exitSprite.getWidth() + screen.playSprite.getX()) > screenX &&
-					(screen.exitSprite.getY() < (screen.h - screenY)) &&
-					(screen.exitSprite.getHeight() + screen.playSprite.getY()) > (screen.h - screenY) ){
-				screen.dispose();
+				screen.initThread();
 			}
 		}
 		else{
@@ -119,8 +114,10 @@ public class GameInputProcessor implements InputProcessor {
 
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		// TODO Auto-generated method stub
-		return false;
+		for (int i = 0; i < screen.keys.size(); i++) {
+			screen.keys.get(i).setSprite();
+		}
+		return true;
 	}
 
 	@Override

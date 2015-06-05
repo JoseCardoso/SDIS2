@@ -18,16 +18,17 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class GameScreen implements Screen {
 
 	private Client cli;
-	private Texture menuText, playText, exitText;
-	public Sprite menuSprite, playSprite, exitSprite;
-	public Sound sel;
+	private Texture menuText, playText, logoText;
+	public Sprite menuSprite, playSprite, logoSprite;
 	private OrthographicCamera cam;
 	private SpriteBatch batch;
 	public Vector<Key> keys;
 	public float w, h;
-	public boolean MENU = false;
+	public boolean MENU = true;
 	public ArrayList<Sound> tracks;
 	public int userNo = 0;
+	public float playXInit, playXFin, playYInit, playYFin;
+	public float exitXInit, exitXFin, exitYInit, exitYFin;
 
 	public GameScreen(Client cli) {
 
@@ -37,28 +38,28 @@ public class GameScreen implements Screen {
 		batch = new SpriteBatch();
 		cam = new OrthographicCamera(1000, 700);
 		this.keys = new Vector<Key>();
+		this.logoText = new Texture(
+				Gdx.files.internal("images/menu_game.jpg"));
 		this.menuText = new Texture(
-				Gdx.files.internal("images/sprite_fundo.jpg"));
+				Gdx.files.internal("images/menu_layed.jpg"));
 		this.playText = new Texture(
 				Gdx.files.internal("images/sprite_play.jpg"));
-		this.exitText = new Texture(
-				Gdx.files.internal("images/sprite_exit.jpg"));
+		this.logoSprite = new Sprite(logoText);
 		this.menuSprite = new Sprite(menuText);
 		this.playSprite = new Sprite(playText);
-		this.exitSprite = new Sprite(exitText);
 		this.tracks = new ArrayList<Sound>();
 
+		cam.update();
+	}
+
+	public void initThread(){
 		try {
 			new Thread(new Listener(this)).start();
 			cli.httpGet("/MultiPiano/join");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		// CREATE OCTATE
-		// TYPE 1 - BLACK
-		// TYPE 0 - WHITE
 		int b = 0, w = 0;
 		for (int i = 0; i < 12; i++) {
 			String trk_name;
@@ -89,29 +90,28 @@ public class GameScreen implements Screen {
 			tracks.add(Gdx.audio.newSound(Gdx.files.internal("piano_keys/"
 					+ trk_name + ".wav")));
 		}
-
-		// list.start();
-		cam.update();
 	}
 
 	@Override
 	public void show() {
-		if (MENU) {
-		} else
-			Gdx.input.setInputProcessor(new GameInputProcessor(this, cli));
+		Gdx.input.setInputProcessor(new GameInputProcessor(this, cli));
 	}
 
 	@Override
 	public void render(float delta) {
+		Gdx.gl.glClearColor(1, 1, 1, 1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		if (MENU) {
+			playXInit=((w / 2) - 50);
+			playXFin = playXInit + 130;
+			playYInit = (h / 4) - 50;
+			playYFin = (h / 4) + 65;
+
 			batch.begin();
 			batch.draw(menuSprite, 0, 0, w, h);
-			batch.draw(playSprite, (w / 2) - 150, h / 4, 130, 50);
-			batch.draw(exitSprite, (w / 2) + 50, h / 4, 130, 50);
+			batch.draw(playSprite, playXInit, playYInit, 130, 65);
 			batch.end();
 		} else {
-			Gdx.gl.glClearColor(0, 0, 0, 1);
-			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 			batch.begin();
 
 			for (int i = 0; i < keys.size(); i++) {
@@ -124,6 +124,7 @@ public class GameScreen implements Screen {
 					batch.draw(keys.get(i).key, keys.get(i).x, keys.get(i).y,
 							keys.get(i).width, keys.get(i).height);
 			}
+			batch.draw(logoSprite, ((7*w)/8), 0, w/8, h);
 			batch.end();
 		}
 	}
@@ -153,7 +154,17 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void dispose() {
+		
 		batch.dispose();
+		for(int i=0; i<tracks.size(); i++){
+			tracks.get(i).dispose();
+		}
+		for(int i=0; i<keys.size(); i++){
+			keys.get(i).track.dispose();
+		}
+		menuText.dispose();
+		playText.dispose();
+		logoText.dispose();
 	}
 
 	public void setUser(int userId) {

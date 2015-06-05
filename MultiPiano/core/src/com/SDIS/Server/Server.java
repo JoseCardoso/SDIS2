@@ -17,7 +17,7 @@ public class Server {
 	
 	private HttpServer server;
 	
-	static public int counter = 0;
+	static public int counter = 2;
 	
 	public Server(InetSocketAddress port) throws IOException{
 		
