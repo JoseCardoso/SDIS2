@@ -8,7 +8,7 @@ public class Main {
 	{
 	//	String a[] = {"hey"};
 		//String b[] = {"hey, hey"};
-		Client cli = new Client("188.80.49.242", 9000);
+		Client cli = new Client("172.30.40.12", 9000);
 		try {
 			String joined = cli.httpGet("/MultiPiano/join");
 			

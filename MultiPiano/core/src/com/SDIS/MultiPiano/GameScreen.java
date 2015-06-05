@@ -33,7 +33,7 @@ public class GameScreen implements Screen {
 	public GameScreen(Client cli){
 		
 		try {
-			list = new Listener(new InetSocketAddress(9001), this);
+			list = new Listener( this);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

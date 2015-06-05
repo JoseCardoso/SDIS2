@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -33,7 +35,7 @@ public class Handler implements HttpHandler{
 		Scanner scanner = new Scanner(is,"UTF-8").useDelimiter("\n");
 		// String theString = scanner.hasNext() ? scanner.next() : "";
 
-		
+
 
 
 		String path = t.getRequestURI().getPath();
@@ -71,34 +73,51 @@ public class Handler implements HttpHandler{
 	}
 
 	public void sendNotes(String response, HttpExchange t){
-		
+
 		ArrayList<InetAddress> contributors = svr.getContributors();
-		
+
 		for(int i = 0; i < contributors.size();i++)
 		{
-			if(!contributors.listIterator(i).next().equals(t.getRemoteAddress().getAddress()))
-				httpGet(response,contributors.listIterator(i).next() );
-			
-			
-			
+			if(!contributors.listIterator(i).next().equals(t.getRemoteAddress().getAddress())){
+
+				try {
+				DatagramSocket serverSocket = new DatagramSocket();
+				DatagramPacket msgPacket = new DatagramPacket(response.getBytes(),
+						response.getBytes().length, contributors.listIterator(i).next(),9001);
+					serverSocket.send(msgPacket);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+
+
+
+
+
+			httpGet(response,contributors.listIterator(i).next() );
+
+
+
 		}
-		
-		
+
+
 	}
-	
-	
+
+
 	public void httpGet(String response,InetAddress ip)
 	{
-		 URL url;
+		URL url;
 		try {
 			url = new URL("http",ip.toString(),9001,response);
 			HttpURLConnection conn =
 					(HttpURLConnection) url.openConnection();
-			
+
 			if (conn.getResponseCode() != 200) {
 				throw new IOException(conn.getResponseMessage());
 			}
-			
+
 			// Buffer the result into a string
 			BufferedReader rd = new BufferedReader(
 					new InputStreamReader(conn.getInputStream()));
@@ -108,7 +127,7 @@ public class Handler implements HttpHandler{
 				sb.append(line);
 			}
 			rd.close();
-			
+
 			conn.disconnect();
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
@@ -117,29 +136,29 @@ public class Handler implements HttpHandler{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
-	
-	
-	
+
+
+
 	public String getFaixa(String path, HttpExchange t){
-		
+
 		InetSocketAddress temp = t.getRemoteAddress();
 
 		if(!svr.getContributors().contains(temp.getAddress()))	
 			return "Not Joined, please join session before playing.\n";
 
 		String[] faixa = path.split("/");
-	
+
 		int num = Integer.parseInt(faixa[2].split("ff")[1]);
-		
-		
+
+
 		if(num < 1 || num > 64)
 		{
 			System.out.println("invalid track");
-			
+
 		}
-		
+
 
 		return faixa[2];
 
@@ -166,7 +185,7 @@ public class Handler implements HttpHandler{
 	{
 		InetSocketAddress temp = t.getRemoteAddress();
 
-	
+
 		return svr.getContributors().remove(temp.getAddress());
 
 	}

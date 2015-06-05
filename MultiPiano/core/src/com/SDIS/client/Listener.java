@@ -1,34 +1,75 @@
 package com.SDIS.client;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
 
 
 
+import java.net.MulticastSocket;
+import java.net.SocketException;
+
 import com.SDIS.MultiPiano.GameScreen;
+import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 
 public class Listener extends Thread {
-	
-	private HttpServer list;
-	private ClientHandler handler;
-	private InetSocketAddress port;
+
 	private GameScreen gs;
-	
-	public Listener(InetSocketAddress port, GameScreen gameScreen) throws IOException {
+	private byte[] buffer = new byte[256];
+
+	public Listener(GameScreen gameScreen)  throws IOException {
 		this.gs = gameScreen;
-		this.port = port;
-			handler = new ClientHandler(this); 
-			list = HttpServer.create(port,0);
-			list.createContext("/MultiPiano", handler);
-			list.setExecutor(null);
+
 	}
 
 	public void run()
 	{
-		list.start();	
-		
-		
+		do{
+			try {
+
+
+				DatagramSocket clientSocket = new DatagramSocket();
+
+				DatagramPacket receivePacket = new DatagramPacket(buffer, buffer.length);
+				clientSocket.receive(receivePacket);
+
+
+				String msg = new String(buffer, 0, buffer.length);
+
+				int tracknum = getFaixaToPlay(msg);
+				gs.keys.get(tracknum -1).track.play();
+
+			} catch (SocketException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}while(true);
+	}
+
+
+	public int getFaixaToPlay(String msg){
+
+
+		String[] faixa = msg.split("/");
+
+		int num = Integer.parseInt(faixa[2].split("ff")[1]);
+
+
+		if(num < 1 || num > 64)
+		{
+			System.out.println("invalid track");
+
+		}
+
+		return num;
+
 	}
 
 	public GameScreen getGs() {
@@ -39,6 +80,6 @@ public class Listener extends Thread {
 		this.gs = gs;
 	}
 
-	
-	
+
+
 }

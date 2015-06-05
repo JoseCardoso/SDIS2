@@ -2,7 +2,7 @@ package com.SDIS.MultiPiano;
 
 import java.io.IOException;
 
-import com.SDIS.client.Client;
+import com.SDIS.client.*;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
@@ -12,7 +12,7 @@ public class MultiPiano extends Game implements ApplicationListener {
 	@Override
 	public void create() {
 		
-		cli = new Client("192.168.2.106", 9001);
+		cli = new Client("192.168.2.116", 9001);
 		try {
 			cli.httpGet("/MultiPiano/join");
 		} catch (IOException e) {
