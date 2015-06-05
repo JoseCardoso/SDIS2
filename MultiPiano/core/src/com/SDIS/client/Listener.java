@@ -3,39 +3,41 @@ package com.SDIS.client;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.InetSocketAddress;
 import java.net.SocketException;
 
 import com.SDIS.MultiPiano.GameScreen;
 
-public class Listener implements Runnable { 
+public class Listener implements Runnable {
 
-	private GameScreen gs;
+	private final GameScreen gs;
 	private byte[] buffer = new byte[256];
 	private DatagramSocket clientSocket;
 
-	public Listener(GameScreen gameScreen)  throws IOException  {
+	public Listener(final GameScreen gameScreen) throws IOException {
 		this.gs = gameScreen;
 		this.clientSocket = new DatagramSocket(9003);
-		
+
 	}
 
-	public void run()
-	{
-		do{
+	public void run() {
+		do {
 			try {
 
-				DatagramPacket receivePacket = new DatagramPacket(buffer, buffer.length);
+				DatagramPacket receivePacket = new DatagramPacket(buffer,
+						buffer.length);
 				clientSocket.receive(receivePacket);
 
-				String msg = new String(receivePacket.getData(), 0, receivePacket.getLength());
-				//if(msg.getBytes()[0]=='f'){
+				String msg = new String(receivePacket.getData(), 0,
+						receivePacket.getLength());
+				if (msg.startsWith("/MultiPiano/ff")) {
 					int tracknum = getFaixaToPlay(msg);
 					gs.tracks.get(tracknum - 1).play();
-					//}
-			/*	else{
-					gs.userNo=Integer.parseInt(msg);
-				}*/
+				} else if (msg.startsWith("/userId:")) {
+					String[] id = msg.split(" ");
+
+					gs.setUser(Integer.parseInt(id[1]) % 5);
+					System.out.println("userId: " + gs.userNo);
+				}
 
 			} catch (SocketException e) {
 				// TODO Auto-generated catch block
@@ -44,20 +46,16 @@ public class Listener implements Runnable {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}while(true);
+		} while (true);
 	}
 
-
-	public int getFaixaToPlay(String msg){
-
+	public int getFaixaToPlay(String msg) {
 
 		String[] faixa = msg.split("/");
 
 		int num = Integer.parseInt(faixa[2].split("ff")[1]);
 
-
-		if(num < 1 || num > 64)
-		{
+		if (num < 1 || num > 64) {
 			System.out.println("invalid track");
 
 		}
@@ -69,11 +67,5 @@ public class Listener implements Runnable {
 	public GameScreen getGs() {
 		return gs;
 	}
-
-	public void setGs(GameScreen gs) {
-		this.gs = gs;
-	}
-
-
 
 }
