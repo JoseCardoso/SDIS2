@@ -46,15 +46,11 @@ public class GameInputProcessor implements InputProcessor {
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 
 		if(screen.MENU){
-			if(		(screen.playSprite.getX() < screenX) && 
-					((screen.playSprite.getWidth() + screen.playSprite.getX()) > screenX) &&
-					(screen.playSprite.getY() < screenY) &&
-					((screen.playSprite.getHeight() + screen.playSprite.getY()) > screenY)){
+			if(		(screen.playSprite.getX()) < screenX && 
+					(screen.playSprite.getWidth() + screen.playSprite.getX()) > screenX &&
+					(screen.playSprite.getY() < (screen.h - screenY)) &&
+					(screen.playSprite.getHeight() + screen.playSprite.getY()) > (screen.h - screenY) ){
 				screen.MENU = false;
-				if(screen.MENU)
-					System.out.println("MENU: TRUE");
-				else
-					System.out.println("MENU: FALSE");
 			}
 			if(		(screen.exitSprite.getX()) < screenX && 
 					(screen.exitSprite.getWidth() + screen.playSprite.getX()) > screenX &&
@@ -69,11 +65,10 @@ public class GameInputProcessor implements InputProcessor {
 					if (screen.keys.get(i).type==1) {
 						if(screen.keys.get(i).touched(screenX, screenY)){
 							screen.keys.get(i).track.play();
-							
+
 							String mes = "/MultiPiano/";
 							mes += screen.keys.get(i).trackName;
 							cli.httpGet(mes);
-							
 							screen.keys.get(i).setShadowSprite();
 							return true;
 						}
@@ -84,11 +79,10 @@ public class GameInputProcessor implements InputProcessor {
 					if (screen.keys.get(i).type==0) {
 						if(screen.keys.get(i).touched(screenX, screenY)){
 							screen.keys.get(i).track.play();
-							
+
 							String mes = "/MultiPiano/";
 							mes += screen.keys.get(i).trackName;
 							cli.httpGet(mes);
-							
 							screen.keys.get(i).setShadowSprite();
 							return true;
 						}
@@ -97,7 +91,8 @@ public class GameInputProcessor implements InputProcessor {
 				}
 			} catch (IOException e) {
 
-			}}
+			}
+		}
 		return false;
 	}
 
