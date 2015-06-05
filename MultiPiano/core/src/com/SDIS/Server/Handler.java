@@ -21,6 +21,7 @@ import com.sun.net.httpserver.HttpHandler;
 public class Handler implements HttpHandler{
 
 	private Server svr;
+	private int counter= 0;
 
 	public Handler(Server svr){
 		this.svr = svr;
@@ -79,25 +80,22 @@ public class Handler implements HttpHandler{
 		for(int i = 0; i < contributors.size();i++)
 		{
 			if(!contributors.listIterator(i).next().equals(t.getRemoteAddress().getAddress())){
-
+				
+				String msgToSend = response;
 				try {
 				DatagramSocket serverSocket = new DatagramSocket();
 				DatagramPacket msgPacket = new DatagramPacket(response.getBytes(),
-						response.getBytes().length, contributors.listIterator(i).next(),9004);
+						response.getBytes().length, contributors.listIterator(i).next(),9003);
 					serverSocket.send(msgPacket);
 					System.out.println("enviou merdas");
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-
 			}
-
-
 		}
-
-
 	}
+	
 
 
 	public void httpGet(String response,InetAddress ip)
@@ -171,6 +169,21 @@ public class Handler implements HttpHandler{
 		else
 		{
 			svr.getContributors().add(temp.getAddress());
+			counter++;
+			String msgToSend = "" + counter;
+			try {
+			DatagramSocket serverSocket = new DatagramSocket();
+			DatagramPacket msgPacket = new DatagramPacket(msgToSend.getBytes(),
+					msgToSend.getBytes().length, temp.getAddress(),9003);
+				serverSocket.send(msgPacket);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+			
+			
 			return true;
 		}
 	}
