@@ -83,15 +83,21 @@ public class Handler implements HttpHandler{
 				try {
 				DatagramSocket serverSocket = new DatagramSocket();
 				DatagramPacket msgPacket = new DatagramPacket(response.getBytes(),
-						response.getBytes().length, contributors.listIterator(i).next(),9004);
+						response.getBytes().length, contributors.listIterator(i).next(),9001);
 					serverSocket.send(msgPacket);
-					System.out.println("enviou merdas");
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
 			}
+
+
+
+
+
+			httpGet(response,contributors.listIterator(i).next() );
+
 
 
 		}

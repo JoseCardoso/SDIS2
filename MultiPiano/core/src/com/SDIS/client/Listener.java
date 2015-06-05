@@ -38,7 +38,7 @@ public class Listener extends Thread {
 				clientSocket.receive(receivePacket);
 
 
-				String msg = new String(receivePacket.getData(), 0, receivePacket.getLength());
+				String msg = new String(buffer, 0, buffer.length);
 
 				int tracknum = getFaixaToPlay(msg);
 				gs.keys.get(tracknum -1).track.play();
